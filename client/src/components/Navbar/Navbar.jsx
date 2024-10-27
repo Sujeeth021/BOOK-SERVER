@@ -15,7 +15,7 @@ const Menu = () => (
       <a href='/addBook'>Add Book</a>
     </p>
     <p>
-      <a href='/booksearch'>Search a Book</a>
+      <a href='/main'>Search a Book</a>
     </p>
   </>
 );
