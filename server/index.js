@@ -1,20 +1,29 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const corsOptions = require('./config/corsOptions');
-const PORT = process.env.PORT || 8082;
+import express from 'express';
+import cors from 'cors';
+import corsOptions from './config/corsOptions.js';
 
-//Cross Origin Resource Sharing
+const PORT = process.env.PORT || 8082;
+import { connectdb } from "./db/db.js";
+
+import booksRouter from './routes/api/books.js';  
+
+const app = express();
+
 app.use(cors(corsOptions));
 
-//built-in middleware to handle url encoded data
-//data which user enters in a form
+
 app.use(express.urlencoded({ extended: false }));
 
-//built-in middleware for json data
+
 app.use(express.json());
 
 //Routes
-app.use('/books', require('./routes/api/books'));
+// app.use('/books', require('./routes/api/books'));
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.use('/books', booksRouter);
+
+app.listen(PORT, () => 
+    {
+        connectdb();
+        console.log(`Server running on port ${PORT}`)
+    });
