@@ -39,7 +39,7 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-      {/* <p>Don't have an account? <Link to="/signin">Sign In</Link></p> */}
+      {<p>Don't have an account? <Link to="/signin">Sign Up</Link></p>}
     </div>
   );
 };
