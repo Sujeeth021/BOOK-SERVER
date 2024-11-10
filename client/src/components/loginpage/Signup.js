@@ -50,7 +50,7 @@ const SignIn = () => {
 
   return (
     <div className='total'>
-      <h2>Sign In</h2>
+      <h2>Sign Up</h2>
       <form onSubmit={handleSignIn} className="form-container">
         <div className="form-group">
           <label>Email:</label>
@@ -82,7 +82,7 @@ const SignIn = () => {
         </div>
 
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? 'Signing In...' : 'Sign In'}
+          {loading ? 'Signing In...' : 'Sign Up'}
         </button>
       </form>
     </div>
