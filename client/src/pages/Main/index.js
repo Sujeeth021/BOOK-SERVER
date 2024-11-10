@@ -26,37 +26,60 @@ function Main() {
     }
   }, []);
 
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
   async function fetchBooks() {
-    setLoading(true);
-    await api.get(`/volumes?q=${query}`).then((response) => {
-      if (!response.data.totalItems) {
-        setLoading(false);
-        return Toast.fire({
-          icon: 'error',
-          title: 'No books found with this query',
-        });
-      }
-
-      const books = response.data.items.map((book) => {
-        const thumbnailUrl = book.volumeInfo.imageLinks
-          ? book.volumeInfo.imageLinks.thumbnail
-          : 'https://books.google.com.br/googlebooks/images/no_cover_thumb.gif';
-
-        return {
-          id: book.id,
-          title: book.volumeInfo.title,
-          authors: book.volumeInfo.authors,
-          description: book.volumeInfo.description,
-          thumbnailUrl,
-        };
-      });
-
-      setBooks(books);
-      setLoading(false);
-      localStorage.setItem('books', JSON.stringify(books));
-      localStorage.setItem('query', query);
-    });
+      setLoading(true);
+  
+      const fetchWithRetry = async (retries = 3, delayTime = 1000) => {
+          try {
+              const response = await api.get(`/volumes?q=${query}`);
+              if (!response.data.totalItems) {
+                  setLoading(false);
+                  return Toast.fire({
+                      icon: 'error',
+                      title: 'No books found with this query',
+                  });
+              }
+  
+              const books = response.data.items.map((book) => {
+                  const thumbnailUrl = book.volumeInfo.imageLinks
+                      ? book.volumeInfo.imageLinks.thumbnail
+                      : 'https://books.google.com.br/googlebooks/images/no_cover_thumb.gif';
+  
+                  return {
+                      id: book.id,
+                      title: book.volumeInfo.title,
+                      authors: book.volumeInfo.authors,
+                      description: book.volumeInfo.description,
+                      thumbnailUrl,
+                  };
+              });
+  
+              setBooks(books);
+              localStorage.setItem('books', JSON.stringify(books));
+              localStorage.setItem('query', query);
+              setLoading(false);
+          } catch (error) {
+              if (error.response && error.response.status === 429 && retries > 0) {
+                  const retryAfter = error.response.headers['retry-after'];
+                  const waitTime = retryAfter ? parseInt(retryAfter, 10) * 1000 : delayTime;
+                  await delay(waitTime);
+                  return fetchWithRetry(retries - 1, waitTime * 2);
+              } else {
+                  setLoading(false);
+                  Toast.fire({
+                      icon: 'error',
+                      title: 'An error occurred while fetching books',
+                  });
+              }
+          }
+      };
+  
+      await fetchWithRetry();
   }
+  
+
 
   function handleInput(event) {
     setQuery(event.target.value);
