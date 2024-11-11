@@ -1,4 +1,3 @@
-
 const whitelist = [
   'https://ateeqrana.live', 
   'http://127.0.0.1:5500', 
@@ -8,13 +7,16 @@ const whitelist = [
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
+    // Allow requests with no origin, like mobile apps or curl requests
+    if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
 };
 
 export default corsOptions;

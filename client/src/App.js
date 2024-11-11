@@ -13,6 +13,10 @@ import SignIn from './components/loginpage/Signup';
 import Main from './pages/Main';
 import BookDetailspage from './pages/BookDetails';
 import BookDetails from './components/booksearchpage/books';
+
+// ProtectedRoute
+import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
+
 // CSS
 import './App.css';
 
@@ -26,22 +30,29 @@ function App() {
 
 function AppRoutes() {
   const location = useLocation();
-  const noNavbarRoutes = ['/'];
+  const noNavbarRoutes = ['/login', '/SignUp']; // Routes where Navbar is not shown
 
   return (
     <>
+      {/* Navbar should be shown unless we're on the login or signup page */}
       {!noNavbarRoutes.includes(location.pathname) && <Navbar />}
+      
       <Routes>
-        <Route path='/' element={<Login />} />
-        <Route path='/signin' element={<SignIn />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/books' element={<Books />} />
-        <Route path='/addBook' element={<AddBook />} />
-        <Route path='/bookspage/editBook/:id' element={<EditBook />} />
-        <Route path='/booksearch' element={<BookDetails />} />
-        <Route path='/main' element={<Main />} />
-        <Route path='/bookspage/:book_id' element={<BookDetailspage />} />
-        <Route path="*" element={<Navigate to="/home" replace />} /> {/* Catch-all route */}
+        {/* Public Routes */}
+        <Route path='/login' element={<Login />} />
+        <Route path='/SignUp' element={<SignIn />} />
+
+        {/* Protected Routes */}
+        <Route path='/home' element={<ProtectedRoute element={<Home />} />} />
+        <Route path='/books' element={<ProtectedRoute element={<Books />} />} />
+        <Route path='/addBook' element={<ProtectedRoute element={<AddBook />} />} />
+        <Route path='/bookspage/editBook/:id' element={<ProtectedRoute element={<EditBook />} />} />
+        <Route path='/booksearch' element={<ProtectedRoute element={<BookDetails />} />} />
+        <Route path='/main' element={<ProtectedRoute element={<Main />} />} />
+        <Route path='/bookspage/:book_id' element={<ProtectedRoute element={<BookDetailspage />} />} />
+
+        {/* Catch-all route, redirect to login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </>
   );
