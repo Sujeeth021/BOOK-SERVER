@@ -105,7 +105,7 @@ function Main() {
         <div className="container">
           <div className="logo">
             <h1>
-              <span className="logo-blue">Book</span>Finder
+              <span className="logo-blue">Book</span>Xplorer
             </h1>
 
             <h2>
