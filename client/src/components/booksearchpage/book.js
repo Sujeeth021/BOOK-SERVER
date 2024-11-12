@@ -15,8 +15,6 @@ const Book = ({ title, author, cover }) => {
       },
     },
   };
-
-  // Setting up default values for book info
   title = title || "Title is not available";
   author = author || "Author(s) name not available";
   const coverImage = cover || defaultBook;
@@ -51,8 +49,6 @@ const Book = ({ title, author, cover }) => {
             </h4>
           )}
         </div>
-
-        {/* Add more details if needed */}
       </div>
     </section>
   );

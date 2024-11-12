@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-// Images
-// import svg from '../../assets/images/books.svg';
-
-// Plugins
 import api from '../../services/api';
 import { Toast } from '../../services/sweetAlert';
-
-// Styled components
 import { InputSection, SubmitButton, BooksSection, ClearButton, QueryInput } from './styles';
 import BookBlock from '../../components/BookBlock';
 
@@ -79,8 +72,6 @@ function Main() {
       await fetchWithRetry();
   }
   
-
-
   function handleInput(event) {
     setQuery(event.target.value);
   }

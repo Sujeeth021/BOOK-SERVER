@@ -6,26 +6,22 @@ import './style.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-  const [loading, setLoading] = useState(false); // Loading state for the button
-  const [error, setError] = useState(''); // To display any error messages
+  const [showPassword, setShowPassword] = useState(false); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  // Handle login form submission
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Basic validation: check if email and password are not empty
     if (!email || !password) {
       setError('Please enter both email and password');
       return;
     }
 
     setLoading(true);
-    setError(''); // Reset any previous errors
+    setError(''); 
 
     try {
-      const response = await fetch('http://localhost:8082/api/auth/login', { // Make sure your API URL is correct
+      const response = await fetch('http://localhost:8082/api/auth/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,20 +33,18 @@ const Login = () => {
 
       if (response.ok) {
         console.log('Login successful:', data);
-        // Save the JWT token in localStorage
         localStorage.setItem('authToken', data.token);
-        
-        // Redirect to the home page or protected route after successful login
+        console.log(data.token);
         navigate('/home');
       } else {
         console.error('Login failed:', data.message);
-        setError(data.message); // Display the error message from the server
+        setError(data.message);
       }
     } catch (error) {
       console.error('Error during login:', error);
       setError('Something went wrong. Please try again later.');
     } finally {
-      setLoading(false); // Stop the loading spinner
+      setLoading(false); 
     }
   };
 
@@ -61,7 +55,7 @@ const Login = () => {
   return (
     <div className='total'>
       <h2>Login</h2>
-      {error && <div className="error-message">{error}</div>} {/* Display error messages */}
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleLogin}>
         <div className="form-group">
           <label>Email:</label>
@@ -77,13 +71,13 @@ const Login = () => {
           <label>Password:</label>
           <div className="password-input">
             <input 
-              type={showPassword ? "text" : "password"} // Toggle between text and password
+              type={showPassword ? "text" : "password"}
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
             />
             <span className="password-toggle" onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle icon */}
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
         </div>

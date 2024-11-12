@@ -11,9 +11,6 @@ const Menu = () => (
       <a href='/books'>View My Collection</a>
     </p>
     <p>
-      <a href='/addBook'>Add Book</a>
-    </p>
-    <p>
       <a href='/main'>Search a Book</a>
     </p>
   </>

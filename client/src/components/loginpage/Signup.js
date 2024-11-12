@@ -9,18 +9,16 @@ const SignUp = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [user, setUser] = useState(null);  // Store the user data after sign-up
+  const [user, setUser] = useState(null); 
   const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
 
-    // Email validation
+    
     if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-
-    // Password validation (at least 8 characters)
     if (password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters long';
     }
@@ -39,7 +37,6 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      // Sign-up (POST request) - Register the user
       const response = await fetch('http://localhost:8082/api/auth/signup', { // Change to your actual sign-up endpoint
         method: 'POST',
         headers: {
@@ -52,14 +49,13 @@ const SignUp = () => {
 
       if (response.ok) {
         console.log('Sign-up successful:', data);
-        // Save the JWT token in localStorage or state
         localStorage.setItem('authToken', data.token);
-        setUser(data.user);  // Store the user data received from the server
+        setUser(data.user);  
 
-        navigate('/home');  // Redirect to the home page after successful sign-up
+        navigate('/home');  
       } else {
         console.error('Sign-up failed:', data.message);
-        alert(data.message);  // Display error message if the sign-up fails
+        alert(data.message);
       }
     } catch (error) {
       console.error('Error during sign-up:', error);
@@ -75,13 +71,13 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8082/api/auth/update', {  // Replace with actual update endpoint
+      const response = await fetch('http://localhost:8082/api/auth/update', {  
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,  // Include the token in the header
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
         },
-        body: JSON.stringify({ email, password }),  // Update the email and/or password
+        body: JSON.stringify({ email, password }),  
       });
 
       const data = await response.json();
@@ -89,10 +85,10 @@ const SignUp = () => {
       if (response.ok) {
         console.log('Profile updated successfully:', data);
         alert('Profile updated successfully!');
-        setUser(data.user);  // Update the user state with the updated data
+        setUser(data.user);  
       } else {
         console.error('Profile update failed:', data.message);
-        alert(data.message);  // Display error message if the update fails
+        alert(data.message);  
       }
     } catch (error) {
       console.error('Error during profile update:', error);
@@ -110,7 +106,6 @@ const SignUp = () => {
     <div className='total'>
       <h2>Sign Up</h2>
       <form onSubmit={handleSignUp} className="form-container">
-        {/* Email Field */}
         <div className="form-group">
           <label>Email:</label>
           <input
@@ -122,13 +117,11 @@ const SignUp = () => {
           />
           {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
-
-        {/* Password Field */}
         <div className="form-group">
           <label>Password:</label>
           <div className="password-input">
             <input
-              type={showPassword ? 'text' : 'password'}  // Toggle between text and password
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -140,14 +133,10 @@ const SignUp = () => {
           </div>
           {errors.password && <p className="error-message">{errors.password}</p>}
         </div>
-
-        {/* Submit Button for Sign Up */}
         <button type="submit" className="submit-button" disabled={loading}>
           {loading ? 'Signing Up...' : 'Sign Up'}
         </button>
       </form>
-
-      {/* Profile Update Form (only displayed after successful sign-up) */}
       {user && (
         <div className="profile-update-container">
           <h3>Update Profile</h3>
@@ -184,7 +173,7 @@ const SignUp = () => {
         </div>
       )}
 
-      {/* Link to Sign In Page */}
+      
       <p>Already have an account? <Link to="/Login">Login</Link></p>
     </div>
   );

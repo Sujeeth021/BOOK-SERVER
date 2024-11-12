@@ -1,6 +1,6 @@
 // routes/api/books.js
 import express from 'express';
-import Book from '../../model/book.js';
+import Book from '../../model/Book.js';
 import authenticateToken from './authMiddleware.js';  // Import middleware to verify JWT token
 
 const router = express.Router();
@@ -9,6 +9,7 @@ const router = express.Router();
 router.post('/', authenticateToken, async (req, res) => {
   const { id, thumbnailUrl, title, authors, description } = req.body;
   const userId = req.user.userId;  // Extract user ID from JWT token
+  
 
   try {
     // Create a new book associated with the authenticated user
@@ -29,17 +30,19 @@ router.post('/', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Error saving book:', error);
-    res.status(500).json({ message: 'Failed to add book. Please try again.' });
+    console.error(error.stack);
+    res.status(500).json({ message: `Failed to add book.` });
   }
 });
 
 // Route to get all books for a user (authenticated users only)
-router.get('/user-books', authenticateToken, async (req, res) => {
-  const userId = req.user.userId;
+router.get('/', authenticateToken, async (req, res) => {
+  const userId = req.user.userId;  
+  console.log("User ID from JWT:", userId);
 
   try {
-    const books = await Book.find({ userId }).sort({ addedAt: -1 });  // Fetch books for this user, sorted by addedAt date
-    res.status(200).json(books);  // Send the user's books as the response
+    const books = await Book.find({ userId }).sort({ addedAt: -1 }); 
+    res.status(200).json(books);  // Send books as response
   } catch (error) {
     console.error('Error fetching books:', error);
     res.status(500).json({ message: 'Failed to fetch books.' });
