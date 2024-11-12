@@ -22,14 +22,14 @@ function App() {
 
 function AppRoutes() {
   const location = useLocation();
-  const noNavbarRoutes = ['/login', '/SignUp']; 
+  const noNavbarRoutes = ['/Login', '/SignIn']; 
   return (
     <>
       {!noNavbarRoutes.includes(location.pathname) && <Navbar />}
       
       <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/SignUp' element={<SignIn />} />
+        <Route path='/Login' element={<Login />} />
+        <Route path='/SignIn' element={<SignIn />} />
         <Route path='/home' element={<ProtectedRoute element={<Home />} />} />
         <Route path='/books' element={<ProtectedRoute element={<Books />} />} />
         <Route path='/addBook' element={<ProtectedRoute element={<AddBook />} />} />
