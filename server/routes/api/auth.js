@@ -1,18 +1,13 @@
-// routes/api/auth.js
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../../model/User.js'; 
+import User from '../../model/User.js';
 import dotenv from 'dotenv';
 
-dotenv.config();  
-
+dotenv.config();
 const router = express.Router();
-
-
 router.post('/signup', async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -21,20 +16,20 @@ router.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
     await newUser.save();
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
     res.status(201).json({
       message: 'User created successfully',
       token,
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error during signup:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -48,16 +43,13 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
     res.status(200).json({
       message: 'Login successful',
       token,
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error during login:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-
 export default router;
