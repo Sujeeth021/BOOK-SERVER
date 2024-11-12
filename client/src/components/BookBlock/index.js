@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { BookBlock as BookBlockStyled } from './styles';
 
-
 const BookBlock = (props) => {
   const { id, thumbnailUrl, title, authors, description } = props.book;
 
@@ -13,6 +12,7 @@ const BookBlock = (props) => {
       alert("You need to be logged in to add a book.");
       return;
     }
+
     const bookData = {
       id,
       thumbnailUrl,
@@ -20,42 +20,26 @@ const BookBlock = (props) => {
       authors,
       description,
     };
-    try {
-      const response = await fetch('http://localhost:8082/api/books', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(bookData),
-      });
-    
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Error response text:", errorText);
-        throw new Error("Network response was not ok");
-      }
-    
-      const data = await response.json();
-      console.log("Book added:", data);
-    } catch (error) {
-      console.error("Error adding book:", error);
-    }
-    
+
     try {
       const response = await fetch('http://localhost:8082/api/books', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, 
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(bookData),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('Book added successfully!');
-      } else {
-        alert(data.message || 'Failed to add book.');
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response text:", errorText);
+        throw new Error("Network response was not ok");
       }
+
+      const data = await response.json();
+      console.log("Book added:", data);
+      alert('Book added successfully!');
     } catch (error) {
       console.error('Error adding book:', error);
       alert('Something went wrong. Please try again.');

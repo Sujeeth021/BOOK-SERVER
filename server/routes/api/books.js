@@ -85,31 +85,5 @@ router.delete('/:bookId', authenticateToken, async (req, res) => {
   }
 });
 
-// Route to update a book’s details (authenticated users only)
-router.put('/:bookId', authenticateToken, async (req, res) => {
-  const { bookId } = req.params;
-  const { thumbnailUrl, title, authors, description } = req.body;
-  const userId = req.user.userId;
-
-  try {
-    const updatedBook = await Book.findOneAndUpdate(
-      { _id: bookId, userId },
-      { thumbnailUrl, title, authors, description },
-      { new: true }  // Return the updated book
-    );
-
-    if (!updatedBook) {
-      return res.status(404).json({ message: 'Book not found or you do not have permission to update it.' });
-    }
-
-    res.status(200).json({
-      message: 'Book updated successfully.',
-      book: updatedBook,  // Return the updated book
-    });
-  } catch (error) {
-    console.error('Error updating book:', error);
-    res.status(500).json({ message: 'Failed to update book.' });
-  }
-});
 
 export default router;

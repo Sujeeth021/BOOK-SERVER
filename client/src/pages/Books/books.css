@@ -49,6 +49,7 @@
 .remove-btn {
   background: rgb(160, 0, 0);
   color: #fff;
+  align-items: center;
 }
 
 .light-text {
@@ -113,3 +114,12 @@
     font-size: 1.5rem;
   }
 }
+
+.book-card-buttons {
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  margin-top: 10px;        
+}
+
+
